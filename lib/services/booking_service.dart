@@ -22,7 +22,7 @@ class BookingService {
       },
     );
 
-    return response.data["data"]["id"] as String;
+    return response.data["data"]["booking"]["id"] as String;  // Return booking ID
   }
 
 Future<List<Booking>> getMyBookings() async {

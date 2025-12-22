@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import "package:dio/dio.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
@@ -114,18 +115,21 @@ class _BookingIntentScreenState
             AppButton(
               label: "Proceed to Payment",
               isLoading: isLoading,
-             onPressed: isLoading
+              onPressed: (isLoading || checkInDate == null || checkOutDate == null)
     ? null
     : () async {
         try {
           ref.read(bookingLoadingProvider.notifier).state = true;
 
-          // 1️⃣ Check if booking already exists
-          String? bookingId =
-              ref.read(activeBookingIdProvider);
+          String? bookingId = ref.read(activeBookingIdProvider);
 
-          // 2️⃣ Create booking ONLY if it doesn't exist
           if (bookingId == null) {
+            debugPrint("📦 Creating booking...");
+            debugPrint("Room ID: ${widget.roomId}");
+            debugPrint("Check-in: ${checkInDate!.toUtc().toIso8601String()}");
+            debugPrint("Check-out: ${checkOutDate!.toUtc().toIso8601String()}");
+            debugPrint("Guests: $numberOfGuests");
+
             bookingId = await ref
                 .read(bookingServiceProvider)
                 .createBooking(
@@ -135,43 +139,48 @@ class _BookingIntentScreenState
                   numberOfGuests: numberOfGuests,
                 );
 
-            // Persist bookingId
-            ref.read(activeBookingIdProvider.notifier).state =
-                bookingId;
+            debugPrint("✅ Booking created: $bookingId");
+            ref.read(activeBookingIdProvider.notifier).state = bookingId;
+          } else {
+            debugPrint("♻️ Using existing booking: $bookingId");
           }
 
-          // 3️⃣ Create payment session (retry-safe)
+          debugPrint("💳 Creating payment session...");
           final paymentUrl = await ref
               .read(paymentServiceProvider)
-              .createPaymentSession(
-                bookingId: bookingId,
-              );
+              .createPaymentSession(bookingId: bookingId);
 
-         final uri = Uri.parse(paymentUrl);
+          debugPrint("✅ Payment URL: $paymentUrl");
+
+          final uri = Uri.parse(paymentUrl);
 
           if (kIsWeb) {
-            // Flutter Web: must use browser navigation
-            // ignore: avoid_web_libraries_in_flutter
-            // This is REQUIRED for payment gateways
-            // because popups are blocked otherwise
-            await launchUrl(
-              uri,
-              webOnlyWindowName: "_self",
-            );
+            await launchUrl(uri, webOnlyWindowName: "_self");
           } else {
-            // Mobile: external browser
-            await launchUrl(
-              uri,
-              mode: LaunchMode.externalApplication,
+            await launchUrl(uri, mode: LaunchMode.externalApplication);
+          }
+        } on DioException catch (e) {
+          debugPrint("❌ DioException: ${e.message}");
+          debugPrint("Status: ${e.response?.statusCode}");
+          debugPrint("Response: ${e.response?.data}");
+          
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  e.response?.data?["message"] ?? "Payment failed: ${e.message}"
+                ),
+              ),
             );
           }
-
         } catch (e) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Payment initiation failed"),
-            ),
-          );
+          debugPrint("❌ Unexpected error: $e");
+          
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Error: $e")),
+            );
+          }
         } finally {
           ref.read(bookingLoadingProvider.notifier).state = false;
         }

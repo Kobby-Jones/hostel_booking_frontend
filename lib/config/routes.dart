@@ -1,8 +1,10 @@
+import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:hostel_booking/core/providers.dart";
 import "package:hostel_booking/features/booking/booking_result_screen.dart";
 import "package:hostel_booking/features/booking/my_bookings_screen.dart";
+import "package:hostel_booking/features/payment/payment_result_screen.dart";
 
 import "../features/auth/auth_controller.dart";
 import "../features/auth/login_screen.dart";
@@ -64,6 +66,24 @@ GoRoute(
   path: "/bookings",
   builder: (context, _) => const MyBookingsScreen(),
 ),
+GoRoute(
+  path: "/payment-result",
+  builder: (context, state) {
+    final reference =
+        state.uri.queryParameters["reference"];
+
+    if (reference == null) {
+      return const Scaffold(
+        body: Center(
+          child: Text("Invalid payment reference"),
+        ),
+      );
+    }
+
+    return PaymentResultScreen(reference: reference);
+  },
+),
+
 
     ],
   );
