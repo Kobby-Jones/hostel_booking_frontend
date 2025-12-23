@@ -1,31 +1,26 @@
-class Room {
-  final String id;
-  final String roomNumber;
-  final String roomType;
-  final int capacity;
-  final String pricePerNight;
-  final String pricePerMonth;
-  final bool isAvailable;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  Room({
-    required this.id,
-    required this.roomNumber,
-    required this.roomType,
-    required this.capacity,
-    required this.pricePerNight,
-    required this.pricePerMonth,
-    required this.isAvailable,
-  });
+part 'room.freezed.dart';
+part 'room.g.dart';
 
-  factory Room.fromJson(Map<String, dynamic> json) {
-    return Room(
-      id: json["id"] as String,
-      roomNumber: json["roomNumber"] as String,
-      roomType: json["roomType"] as String,
-      capacity: json["capacity"] as int,
-      pricePerNight: json["pricePerNight"] as String,
-      pricePerMonth: json["pricePerMonth"] as String,
-      isAvailable: json["isAvailable"] as bool,
-    );
-  }
+@freezed
+abstract class Room with _$Room {
+  const Room._();
+
+  const factory Room({
+    required String id,
+    required String roomNumber,
+    required String title,
+    String? description,
+    required String roomType,
+    required int capacity,
+    required double pricePerNight,
+    double? pricePerMonth,
+    int? floor,
+    double? size,
+    @Default([]) List<String> amenities,
+    @Default(true) bool isAvailable,
+  }) = _Room;
+
+  factory Room.fromJson(Map<String, dynamic> json) => _$RoomFromJson(json);
 }

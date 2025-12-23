@@ -1,22 +1,18 @@
-class Pagination {
-  final int total;
-  final int page;
-  final int limit;
-  final int totalPages;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  Pagination({
-    required this.total,
-    required this.page,
-    required this.limit,
-    required this.totalPages,
-  });
+part 'pagination.freezed.dart';
+part 'pagination.g.dart';
 
-  factory Pagination.fromJson(Map<String, dynamic> json) {
-    return Pagination(
-      total: json["total"] as int,
-      page: json["page"] as int,
-      limit: json["limit"] as int,
-      totalPages: json["totalPages"] as int,
-    );
-  }
+@freezed
+abstract class Pagination with _$Pagination {
+  const Pagination._();
+
+  const factory Pagination({
+    required int total,
+    required int page,
+    required int limit,
+    required int totalPages,
+  }) = _Pagination;
+
+  factory Pagination.fromJson(Map<String, dynamic> json) => _$PaginationFromJson(json);
 }

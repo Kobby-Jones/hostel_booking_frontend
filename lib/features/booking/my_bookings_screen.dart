@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:intl/intl.dart";
 import "../../ui/primitives/app_card.dart";
 import "../../ui/tokens/spacing.dart";
 import "my_bookings_provider.dart";
@@ -10,6 +11,7 @@ class MyBookingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(myBookingsProvider);
+    final dateFormat = DateFormat('yyyy-MM-dd');
 
     return Scaffold(
       appBar: AppBar(title: const Text("My Bookings")),
@@ -45,10 +47,12 @@ class MyBookingsScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: AppSpacing.sm),
                       Text("Status: ${booking.status}"),
+
                       Text(
-                        "Stay: ${booking.checkInDate.split("T")[0]} → "
-                        "${booking.checkOutDate.split("T")[0]}",
+                        "Stay: ${dateFormat.format(booking.checkInDate)} → "
+                        "${dateFormat.format(booking.checkOutDate)}",
                       ),
+
                     ],
                   ),
                 ),

@@ -1,19 +1,19 @@
-class Owner {
-  final String id;
-  final String firstName;
-  final String lastName;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  Owner({
-    required this.id,
-    required this.firstName,
-    required this.lastName,
-  });
+part 'owner.freezed.dart';
+part 'owner.g.dart';
 
-  factory Owner.fromJson(Map<String, dynamic> json) {
-    return Owner(
-      id: json["id"] as String,
-      firstName: json["firstName"] as String,
-      lastName: json["lastName"] as String,
-    );
-  }
+@freezed
+abstract class Owner with _$Owner {
+  const Owner._();
+
+  const factory Owner({
+    required String id,
+    required String firstName,
+    required String lastName,
+    String? email,
+    String? phone,
+  }) = _Owner;
+
+  factory Owner.fromJson(Map<String, dynamic> json) => _$OwnerFromJson(json);
 }

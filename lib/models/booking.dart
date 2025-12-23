@@ -1,22 +1,23 @@
-class Booking {
-  final String id;
-  final String status;
-  final String checkInDate;
-  final String checkOutDate;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  Booking({
-    required this.id,
-    required this.status,
-    required this.checkInDate,
-    required this.checkOutDate,
-  });
+part 'booking.freezed.dart';
+part 'booking.g.dart';
 
-  factory Booking.fromJson(Map<String, dynamic> json) {
-    return Booking(
-      id: json["id"] as String,
-      status: json["status"] as String,
-      checkInDate: json["checkInDate"] as String,
-      checkOutDate: json["checkOutDate"] as String,
-    );
-  }
+@freezed
+abstract class Booking with _$Booking {
+  const Booking._();
+
+  const factory Booking({
+    required String id,
+    String? bookingCode,
+    required String status,
+    required DateTime checkInDate,
+    required DateTime checkOutDate,
+    required int numberOfGuests,
+    String? studentPhone,
+    String? specialRequests,
+    required double totalAmount,
+  }) = _Booking;
+
+  factory Booking.fromJson(Map<String, dynamic> json) => _$BookingFromJson(json);
 }
