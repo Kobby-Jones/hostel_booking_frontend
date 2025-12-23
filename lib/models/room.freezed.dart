@@ -15,7 +15,13 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Room {
 
- String get id; String get roomNumber; String get title; String? get description; String get roomType; int get capacity; double get pricePerNight; double? get pricePerMonth; int? get floor; double? get size; List<String> get amenities; bool get isAvailable;
+ String get id; String get roomNumber; String get title; String? get description;// Prisma: String?
+ String get roomType; int get capacity; double get pricePerNight;// Prisma: Decimal
+ double? get pricePerMonth;// Prisma: Decimal?
+ int? get floor;// Prisma: Int?
+ double? get size;// Prisma: Float?
+ List<String> get amenities;// Prisma: String[]
+ bool get isAvailable;
 /// Create a copy of Room
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -227,19 +233,26 @@ class _Room extends Room {
 @override final  String roomNumber;
 @override final  String title;
 @override final  String? description;
+// Prisma: String?
 @override final  String roomType;
 @override final  int capacity;
 @override final  double pricePerNight;
+// Prisma: Decimal
 @override final  double? pricePerMonth;
+// Prisma: Decimal?
 @override final  int? floor;
+// Prisma: Int?
 @override final  double? size;
+// Prisma: Float?
  final  List<String> _amenities;
+// Prisma: Float?
 @override@JsonKey() List<String> get amenities {
   if (_amenities is EqualUnmodifiableListView) return _amenities;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_amenities);
 }
 
+// Prisma: String[]
 @override@JsonKey() final  bool isAvailable;
 
 /// Create a copy of Room

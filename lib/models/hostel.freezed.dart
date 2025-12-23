@@ -15,7 +15,14 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Hostel {
 
- String get id; String get name; String get description; String get address; String get city; String get state; String get country; double? get latitude; double? get longitude; double? get distanceFromCampus; String get contactPhone; String? get contactEmail; List<String> get amenities; String? get rules; String? get checkInTime; String? get checkOutTime; String get status; bool get isActive; Owner get owner; List<Room> get rooms; List<HostelImage> get images;
+ String get id; String get name; String get description; String get address; String get city; String get state; String get country; double? get latitude;// Prisma: Float?
+ double? get longitude;// Prisma: Float?
+ double? get distanceFromCampus;// Prisma: Float?
+ String get contactPhone; String? get contactEmail;// Prisma: String?
+ List<String> get amenities;// Prisma: String[]
+ String? get rules;// Prisma: String?
+ String? get checkInTime; String? get checkOutTime; String get status;// Prisma: ListingStatus
+ bool get isActive; Owner get owner; List<Room> get rooms; List<HostelImage> get images;
 /// Create a copy of Hostel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -249,21 +256,29 @@ class _Hostel extends Hostel {
 @override final  String state;
 @override@JsonKey() final  String country;
 @override final  double? latitude;
+// Prisma: Float?
 @override final  double? longitude;
+// Prisma: Float?
 @override final  double? distanceFromCampus;
+// Prisma: Float?
 @override final  String contactPhone;
 @override final  String? contactEmail;
+// Prisma: String?
  final  List<String> _amenities;
+// Prisma: String?
 @override@JsonKey() List<String> get amenities {
   if (_amenities is EqualUnmodifiableListView) return _amenities;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_amenities);
 }
 
+// Prisma: String[]
 @override final  String? rules;
+// Prisma: String?
 @override final  String? checkInTime;
 @override final  String? checkOutTime;
 @override final  String status;
+// Prisma: ListingStatus
 @override@JsonKey() final  bool isActive;
 @override final  Owner owner;
  final  List<Room> _rooms;

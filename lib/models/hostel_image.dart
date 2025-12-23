@@ -10,7 +10,7 @@ abstract class HostelImage with _$HostelImage {
   const factory HostelImage({
     required String id,
     required String url,
-    required String key,
+    required String key, // Prisma: String (S3 key)
     String? thumbnailUrl,
     String? caption,
     @Default(0) int displayOrder,

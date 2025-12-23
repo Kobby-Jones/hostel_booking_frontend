@@ -11,14 +11,14 @@ abstract class Room with _$Room {
     required String id,
     required String roomNumber,
     required String title,
-    String? description,
+    String? description, // Prisma: String?
     required String roomType,
     required int capacity,
-    required double pricePerNight,
-    double? pricePerMonth,
-    int? floor,
-    double? size,
-    @Default([]) List<String> amenities,
+    required double pricePerNight, // Prisma: Decimal
+    double? pricePerMonth, // Prisma: Decimal?
+    int? floor, // Prisma: Int?
+    double? size, // Prisma: Float?
+    @Default([]) List<String> amenities, // Prisma: String[]
     @Default(true) bool isAvailable,
   }) = _Room;
 

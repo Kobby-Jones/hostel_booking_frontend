@@ -15,7 +15,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$HostelImage {
 
- String get id; String get url; String get key; String? get thumbnailUrl; String? get caption; int get displayOrder;
+ String get id; String get url; String get key;// Prisma: String (S3 key)
+ String? get thumbnailUrl; String? get caption; int get displayOrder;
 /// Create a copy of HostelImage
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -220,6 +221,7 @@ class _HostelImage extends HostelImage {
 @override final  String id;
 @override final  String url;
 @override final  String key;
+// Prisma: String (S3 key)
 @override final  String? thumbnailUrl;
 @override final  String? caption;
 @override@JsonKey() final  int displayOrder;
