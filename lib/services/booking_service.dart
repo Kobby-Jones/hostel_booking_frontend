@@ -2,7 +2,6 @@ import "package:dio/dio.dart";
 import "api/api_client.dart";
 import "../models/booking.dart";
 
-
 class BookingService {
   final Dio _dio = ApiClient.instance;
 
@@ -21,18 +20,34 @@ class BookingService {
         "numberOfGuests": numberOfGuests,
       },
     );
-
-    return response.data["data"]["booking"]["id"] as String;  // Return booking ID
+    // Backend returns { success: true, data: { booking: { id: ... } } }
+    return response.data["data"]["booking"]["id"] as String;
   }
 
+
 Future<List<Booking>> getMyBookings() async {
-  final response = await _dio.get("/bookings");
+  try {
+    final response = await _dio.get("/bookings");
+    
+    // The backend returns { success: true, data: { bookings: [...] } }
+    final List? rawBookings = response.data["data"]["bookings"];
+    
+    if (rawBookings == null) return [];
 
-  return (response.data["data"] as List)
-      .map((e) => Booking.fromJson(e))
-      .toList();
+    return rawBookings
+        .map((e) => Booking.fromJson(e as Map<String, dynamic>))
+        .toList();
+  } catch (e) {
+    throw Exception("Failed to load bookings: $e");
+  }
 }
+
+ 
+
+  Future<void> cancelBooking(String bookingId, {String? reason}) async {
+    await _dio.post(
+      "/bookings/$bookingId/cancel",
+      data: {"reason": reason},
+    );
+  }
 }
-
-
-

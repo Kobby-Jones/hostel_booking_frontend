@@ -1,4 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../core/json_converters.dart';
+import 'room.dart';
 
 part 'booking.freezed.dart';
 part 'booking.g.dart';
@@ -13,10 +15,12 @@ abstract class Booking with _$Booking {
     required String status,
     required DateTime checkInDate,
     required DateTime checkOutDate,
+    required int numberOfNights,
     required int numberOfGuests,
-    String? studentPhone,
+    @DoubleConverter() required double totalAmount,
     String? specialRequests,
-    required double totalAmount,
+    // Change: Ensure nested objects are nullable to prevent 'type Null' errors
+    Room? room, 
   }) = _Booking;
 
   factory Booking.fromJson(Map<String, dynamic> json) => _$BookingFromJson(json);

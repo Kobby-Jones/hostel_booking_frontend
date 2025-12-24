@@ -18,16 +18,16 @@ abstract class Hostel with _$Hostel {
     required String city,
     required String state,
     @Default("Ghana") String country,
-    double? latitude, // Prisma: Float?
-    double? longitude, // Prisma: Float?
-    double? distanceFromCampus, // Prisma: Float?
+    double? latitude,
+    double? longitude,
+    double? distanceFromCampus,
     required String contactPhone,
-    String? contactEmail, // Prisma: String?
-    @Default([]) List<String> amenities, // Prisma: String[]
-    String? rules, // Prisma: String?
+    String? contactEmail,
+    @Default([]) List<String> amenities,
+    String? rules,
     String? checkInTime,
     String? checkOutTime,
-    required String status, // Prisma: ListingStatus
+    required String status,
     @Default(true) bool isActive,
     required Owner owner,
     @Default([]) List<Room> rooms,

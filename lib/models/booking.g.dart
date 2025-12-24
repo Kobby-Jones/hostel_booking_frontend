@@ -12,10 +12,13 @@ _Booking _$BookingFromJson(Map<String, dynamic> json) => _Booking(
   status: json['status'] as String,
   checkInDate: DateTime.parse(json['checkInDate'] as String),
   checkOutDate: DateTime.parse(json['checkOutDate'] as String),
+  numberOfNights: (json['numberOfNights'] as num).toInt(),
   numberOfGuests: (json['numberOfGuests'] as num).toInt(),
-  studentPhone: json['studentPhone'] as String?,
+  totalAmount: const DoubleConverter().fromJson(json['totalAmount']),
   specialRequests: json['specialRequests'] as String?,
-  totalAmount: (json['totalAmount'] as num).toDouble(),
+  room: json['room'] == null
+      ? null
+      : Room.fromJson(json['room'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$BookingToJson(_Booking instance) => <String, dynamic>{
@@ -24,8 +27,9 @@ Map<String, dynamic> _$BookingToJson(_Booking instance) => <String, dynamic>{
   'status': instance.status,
   'checkInDate': instance.checkInDate.toIso8601String(),
   'checkOutDate': instance.checkOutDate.toIso8601String(),
+  'numberOfNights': instance.numberOfNights,
   'numberOfGuests': instance.numberOfGuests,
-  'studentPhone': instance.studentPhone,
+  'totalAmount': const DoubleConverter().toJson(instance.totalAmount),
   'specialRequests': instance.specialRequests,
-  'totalAmount': instance.totalAmount,
+  'room': instance.room,
 };

@@ -1,4 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hostel_booking/models/hostel.dart';
+import '../core/json_converters.dart'; // Import the converter
 
 part 'room.freezed.dart';
 part 'room.g.dart';
@@ -10,16 +12,17 @@ abstract class Room with _$Room {
   const factory Room({
     required String id,
     required String roomNumber,
-    required String title,
-    String? description, // Prisma: String?
+    @Default("Standard Room") String title, // Use default to prevent null crash
+    String? description,
     required String roomType,
     required int capacity,
-    required double pricePerNight, // Prisma: Decimal
-    double? pricePerMonth, // Prisma: Decimal?
-    int? floor, // Prisma: Int?
-    double? size, // Prisma: Float?
-    @Default([]) List<String> amenities, // Prisma: String[]
+    @DoubleConverter() required double pricePerNight, // Safe Decimal parsing
+    @DoubleConverter() double? pricePerMonth,
+    int? floor,
+    double? size,
+    @Default([]) List<String> amenities,
     @Default(true) bool isAvailable,
+    Hostel? hostel,
   }) = _Room;
 
   factory Room.fromJson(Map<String, dynamic> json) => _$RoomFromJson(json);

@@ -15,13 +15,9 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Room {
 
- String get id; String get roomNumber; String get title; String? get description;// Prisma: String?
- String get roomType; int get capacity; double get pricePerNight;// Prisma: Decimal
- double? get pricePerMonth;// Prisma: Decimal?
- int? get floor;// Prisma: Int?
- double? get size;// Prisma: Float?
- List<String> get amenities;// Prisma: String[]
- bool get isAvailable;
+ String get id; String get roomNumber; String get title;// Use default to prevent null crash
+ String? get description; String get roomType; int get capacity;@DoubleConverter() double get pricePerNight;// Safe Decimal parsing
+@DoubleConverter() double? get pricePerMonth; int? get floor; double? get size; List<String> get amenities; bool get isAvailable; Hostel? get hostel;
 /// Create a copy of Room
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -34,16 +30,16 @@ $RoomCopyWith<Room> get copyWith => _$RoomCopyWithImpl<Room>(this as Room, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Room&&(identical(other.id, id) || other.id == id)&&(identical(other.roomNumber, roomNumber) || other.roomNumber == roomNumber)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.roomType, roomType) || other.roomType == roomType)&&(identical(other.capacity, capacity) || other.capacity == capacity)&&(identical(other.pricePerNight, pricePerNight) || other.pricePerNight == pricePerNight)&&(identical(other.pricePerMonth, pricePerMonth) || other.pricePerMonth == pricePerMonth)&&(identical(other.floor, floor) || other.floor == floor)&&(identical(other.size, size) || other.size == size)&&const DeepCollectionEquality().equals(other.amenities, amenities)&&(identical(other.isAvailable, isAvailable) || other.isAvailable == isAvailable));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Room&&(identical(other.id, id) || other.id == id)&&(identical(other.roomNumber, roomNumber) || other.roomNumber == roomNumber)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.roomType, roomType) || other.roomType == roomType)&&(identical(other.capacity, capacity) || other.capacity == capacity)&&(identical(other.pricePerNight, pricePerNight) || other.pricePerNight == pricePerNight)&&(identical(other.pricePerMonth, pricePerMonth) || other.pricePerMonth == pricePerMonth)&&(identical(other.floor, floor) || other.floor == floor)&&(identical(other.size, size) || other.size == size)&&const DeepCollectionEquality().equals(other.amenities, amenities)&&(identical(other.isAvailable, isAvailable) || other.isAvailable == isAvailable)&&(identical(other.hostel, hostel) || other.hostel == hostel));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,roomNumber,title,description,roomType,capacity,pricePerNight,pricePerMonth,floor,size,const DeepCollectionEquality().hash(amenities),isAvailable);
+int get hashCode => Object.hash(runtimeType,id,roomNumber,title,description,roomType,capacity,pricePerNight,pricePerMonth,floor,size,const DeepCollectionEquality().hash(amenities),isAvailable,hostel);
 
 @override
 String toString() {
-  return 'Room(id: $id, roomNumber: $roomNumber, title: $title, description: $description, roomType: $roomType, capacity: $capacity, pricePerNight: $pricePerNight, pricePerMonth: $pricePerMonth, floor: $floor, size: $size, amenities: $amenities, isAvailable: $isAvailable)';
+  return 'Room(id: $id, roomNumber: $roomNumber, title: $title, description: $description, roomType: $roomType, capacity: $capacity, pricePerNight: $pricePerNight, pricePerMonth: $pricePerMonth, floor: $floor, size: $size, amenities: $amenities, isAvailable: $isAvailable, hostel: $hostel)';
 }
 
 
@@ -54,11 +50,11 @@ abstract mixin class $RoomCopyWith<$Res>  {
   factory $RoomCopyWith(Room value, $Res Function(Room) _then) = _$RoomCopyWithImpl;
 @useResult
 $Res call({
- String id, String roomNumber, String title, String? description, String roomType, int capacity, double pricePerNight, double? pricePerMonth, int? floor, double? size, List<String> amenities, bool isAvailable
+ String id, String roomNumber, String title, String? description, String roomType, int capacity,@DoubleConverter() double pricePerNight,@DoubleConverter() double? pricePerMonth, int? floor, double? size, List<String> amenities, bool isAvailable, Hostel? hostel
 });
 
 
-
+$HostelCopyWith<$Res>? get hostel;
 
 }
 /// @nodoc
@@ -71,7 +67,7 @@ class _$RoomCopyWithImpl<$Res>
 
 /// Create a copy of Room
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? roomNumber = null,Object? title = null,Object? description = freezed,Object? roomType = null,Object? capacity = null,Object? pricePerNight = null,Object? pricePerMonth = freezed,Object? floor = freezed,Object? size = freezed,Object? amenities = null,Object? isAvailable = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? roomNumber = null,Object? title = null,Object? description = freezed,Object? roomType = null,Object? capacity = null,Object? pricePerNight = null,Object? pricePerMonth = freezed,Object? floor = freezed,Object? size = freezed,Object? amenities = null,Object? isAvailable = null,Object? hostel = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,roomNumber: null == roomNumber ? _self.roomNumber : roomNumber // ignore: cast_nullable_to_non_nullable
@@ -85,10 +81,23 @@ as double?,floor: freezed == floor ? _self.floor : floor // ignore: cast_nullabl
 as int?,size: freezed == size ? _self.size : size // ignore: cast_nullable_to_non_nullable
 as double?,amenities: null == amenities ? _self.amenities : amenities // ignore: cast_nullable_to_non_nullable
 as List<String>,isAvailable: null == isAvailable ? _self.isAvailable : isAvailable // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,hostel: freezed == hostel ? _self.hostel : hostel // ignore: cast_nullable_to_non_nullable
+as Hostel?,
   ));
 }
+/// Create a copy of Room
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$HostelCopyWith<$Res>? get hostel {
+    if (_self.hostel == null) {
+    return null;
+  }
 
+  return $HostelCopyWith<$Res>(_self.hostel!, (value) {
+    return _then(_self.copyWith(hostel: value));
+  });
+}
 }
 
 
@@ -170,10 +179,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String roomNumber,  String title,  String? description,  String roomType,  int capacity,  double pricePerNight,  double? pricePerMonth,  int? floor,  double? size,  List<String> amenities,  bool isAvailable)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String roomNumber,  String title,  String? description,  String roomType,  int capacity, @DoubleConverter()  double pricePerNight, @DoubleConverter()  double? pricePerMonth,  int? floor,  double? size,  List<String> amenities,  bool isAvailable,  Hostel? hostel)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Room() when $default != null:
-return $default(_that.id,_that.roomNumber,_that.title,_that.description,_that.roomType,_that.capacity,_that.pricePerNight,_that.pricePerMonth,_that.floor,_that.size,_that.amenities,_that.isAvailable);case _:
+return $default(_that.id,_that.roomNumber,_that.title,_that.description,_that.roomType,_that.capacity,_that.pricePerNight,_that.pricePerMonth,_that.floor,_that.size,_that.amenities,_that.isAvailable,_that.hostel);case _:
   return orElse();
 
 }
@@ -191,10 +200,10 @@ return $default(_that.id,_that.roomNumber,_that.title,_that.description,_that.ro
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String roomNumber,  String title,  String? description,  String roomType,  int capacity,  double pricePerNight,  double? pricePerMonth,  int? floor,  double? size,  List<String> amenities,  bool isAvailable)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String roomNumber,  String title,  String? description,  String roomType,  int capacity, @DoubleConverter()  double pricePerNight, @DoubleConverter()  double? pricePerMonth,  int? floor,  double? size,  List<String> amenities,  bool isAvailable,  Hostel? hostel)  $default,) {final _that = this;
 switch (_that) {
 case _Room():
-return $default(_that.id,_that.roomNumber,_that.title,_that.description,_that.roomType,_that.capacity,_that.pricePerNight,_that.pricePerMonth,_that.floor,_that.size,_that.amenities,_that.isAvailable);case _:
+return $default(_that.id,_that.roomNumber,_that.title,_that.description,_that.roomType,_that.capacity,_that.pricePerNight,_that.pricePerMonth,_that.floor,_that.size,_that.amenities,_that.isAvailable,_that.hostel);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -211,10 +220,10 @@ return $default(_that.id,_that.roomNumber,_that.title,_that.description,_that.ro
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String roomNumber,  String title,  String? description,  String roomType,  int capacity,  double pricePerNight,  double? pricePerMonth,  int? floor,  double? size,  List<String> amenities,  bool isAvailable)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String roomNumber,  String title,  String? description,  String roomType,  int capacity, @DoubleConverter()  double pricePerNight, @DoubleConverter()  double? pricePerMonth,  int? floor,  double? size,  List<String> amenities,  bool isAvailable,  Hostel? hostel)?  $default,) {final _that = this;
 switch (_that) {
 case _Room() when $default != null:
-return $default(_that.id,_that.roomNumber,_that.title,_that.description,_that.roomType,_that.capacity,_that.pricePerNight,_that.pricePerMonth,_that.floor,_that.size,_that.amenities,_that.isAvailable);case _:
+return $default(_that.id,_that.roomNumber,_that.title,_that.description,_that.roomType,_that.capacity,_that.pricePerNight,_that.pricePerMonth,_that.floor,_that.size,_that.amenities,_that.isAvailable,_that.hostel);case _:
   return null;
 
 }
@@ -226,34 +235,30 @@ return $default(_that.id,_that.roomNumber,_that.title,_that.description,_that.ro
 @JsonSerializable()
 
 class _Room extends Room {
-  const _Room({required this.id, required this.roomNumber, required this.title, this.description, required this.roomType, required this.capacity, required this.pricePerNight, this.pricePerMonth, this.floor, this.size, final  List<String> amenities = const [], this.isAvailable = true}): _amenities = amenities,super._();
+  const _Room({required this.id, required this.roomNumber, this.title = "Standard Room", this.description, required this.roomType, required this.capacity, @DoubleConverter() required this.pricePerNight, @DoubleConverter() this.pricePerMonth, this.floor, this.size, final  List<String> amenities = const [], this.isAvailable = true, this.hostel}): _amenities = amenities,super._();
   factory _Room.fromJson(Map<String, dynamic> json) => _$RoomFromJson(json);
 
 @override final  String id;
 @override final  String roomNumber;
-@override final  String title;
+@override@JsonKey() final  String title;
+// Use default to prevent null crash
 @override final  String? description;
-// Prisma: String?
 @override final  String roomType;
 @override final  int capacity;
-@override final  double pricePerNight;
-// Prisma: Decimal
-@override final  double? pricePerMonth;
-// Prisma: Decimal?
+@override@DoubleConverter() final  double pricePerNight;
+// Safe Decimal parsing
+@override@DoubleConverter() final  double? pricePerMonth;
 @override final  int? floor;
-// Prisma: Int?
 @override final  double? size;
-// Prisma: Float?
  final  List<String> _amenities;
-// Prisma: Float?
 @override@JsonKey() List<String> get amenities {
   if (_amenities is EqualUnmodifiableListView) return _amenities;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_amenities);
 }
 
-// Prisma: String[]
 @override@JsonKey() final  bool isAvailable;
+@override final  Hostel? hostel;
 
 /// Create a copy of Room
 /// with the given fields replaced by the non-null parameter values.
@@ -268,16 +273,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Room&&(identical(other.id, id) || other.id == id)&&(identical(other.roomNumber, roomNumber) || other.roomNumber == roomNumber)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.roomType, roomType) || other.roomType == roomType)&&(identical(other.capacity, capacity) || other.capacity == capacity)&&(identical(other.pricePerNight, pricePerNight) || other.pricePerNight == pricePerNight)&&(identical(other.pricePerMonth, pricePerMonth) || other.pricePerMonth == pricePerMonth)&&(identical(other.floor, floor) || other.floor == floor)&&(identical(other.size, size) || other.size == size)&&const DeepCollectionEquality().equals(other._amenities, _amenities)&&(identical(other.isAvailable, isAvailable) || other.isAvailable == isAvailable));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Room&&(identical(other.id, id) || other.id == id)&&(identical(other.roomNumber, roomNumber) || other.roomNumber == roomNumber)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.roomType, roomType) || other.roomType == roomType)&&(identical(other.capacity, capacity) || other.capacity == capacity)&&(identical(other.pricePerNight, pricePerNight) || other.pricePerNight == pricePerNight)&&(identical(other.pricePerMonth, pricePerMonth) || other.pricePerMonth == pricePerMonth)&&(identical(other.floor, floor) || other.floor == floor)&&(identical(other.size, size) || other.size == size)&&const DeepCollectionEquality().equals(other._amenities, _amenities)&&(identical(other.isAvailable, isAvailable) || other.isAvailable == isAvailable)&&(identical(other.hostel, hostel) || other.hostel == hostel));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,roomNumber,title,description,roomType,capacity,pricePerNight,pricePerMonth,floor,size,const DeepCollectionEquality().hash(_amenities),isAvailable);
+int get hashCode => Object.hash(runtimeType,id,roomNumber,title,description,roomType,capacity,pricePerNight,pricePerMonth,floor,size,const DeepCollectionEquality().hash(_amenities),isAvailable,hostel);
 
 @override
 String toString() {
-  return 'Room(id: $id, roomNumber: $roomNumber, title: $title, description: $description, roomType: $roomType, capacity: $capacity, pricePerNight: $pricePerNight, pricePerMonth: $pricePerMonth, floor: $floor, size: $size, amenities: $amenities, isAvailable: $isAvailable)';
+  return 'Room(id: $id, roomNumber: $roomNumber, title: $title, description: $description, roomType: $roomType, capacity: $capacity, pricePerNight: $pricePerNight, pricePerMonth: $pricePerMonth, floor: $floor, size: $size, amenities: $amenities, isAvailable: $isAvailable, hostel: $hostel)';
 }
 
 
@@ -288,11 +293,11 @@ abstract mixin class _$RoomCopyWith<$Res> implements $RoomCopyWith<$Res> {
   factory _$RoomCopyWith(_Room value, $Res Function(_Room) _then) = __$RoomCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String roomNumber, String title, String? description, String roomType, int capacity, double pricePerNight, double? pricePerMonth, int? floor, double? size, List<String> amenities, bool isAvailable
+ String id, String roomNumber, String title, String? description, String roomType, int capacity,@DoubleConverter() double pricePerNight,@DoubleConverter() double? pricePerMonth, int? floor, double? size, List<String> amenities, bool isAvailable, Hostel? hostel
 });
 
 
-
+@override $HostelCopyWith<$Res>? get hostel;
 
 }
 /// @nodoc
@@ -305,7 +310,7 @@ class __$RoomCopyWithImpl<$Res>
 
 /// Create a copy of Room
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? roomNumber = null,Object? title = null,Object? description = freezed,Object? roomType = null,Object? capacity = null,Object? pricePerNight = null,Object? pricePerMonth = freezed,Object? floor = freezed,Object? size = freezed,Object? amenities = null,Object? isAvailable = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? roomNumber = null,Object? title = null,Object? description = freezed,Object? roomType = null,Object? capacity = null,Object? pricePerNight = null,Object? pricePerMonth = freezed,Object? floor = freezed,Object? size = freezed,Object? amenities = null,Object? isAvailable = null,Object? hostel = freezed,}) {
   return _then(_Room(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,roomNumber: null == roomNumber ? _self.roomNumber : roomNumber // ignore: cast_nullable_to_non_nullable
@@ -319,11 +324,24 @@ as double?,floor: freezed == floor ? _self.floor : floor // ignore: cast_nullabl
 as int?,size: freezed == size ? _self.size : size // ignore: cast_nullable_to_non_nullable
 as double?,amenities: null == amenities ? _self._amenities : amenities // ignore: cast_nullable_to_non_nullable
 as List<String>,isAvailable: null == isAvailable ? _self.isAvailable : isAvailable // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,hostel: freezed == hostel ? _self.hostel : hostel // ignore: cast_nullable_to_non_nullable
+as Hostel?,
   ));
 }
 
+/// Create a copy of Room
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$HostelCopyWith<$Res>? get hostel {
+    if (_self.hostel == null) {
+    return null;
+  }
 
+  return $HostelCopyWith<$Res>(_self.hostel!, (value) {
+    return _then(_self.copyWith(hostel: value));
+  });
+}
 }
 
 // dart format on
