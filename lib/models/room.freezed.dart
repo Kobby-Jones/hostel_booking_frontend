@@ -15,9 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Room {
 
- String get id; String get roomNumber; String get title;// Use default to prevent null crash
- String? get description; String get roomType; int get capacity;@DoubleConverter() double get pricePerNight;// Safe Decimal parsing
-@DoubleConverter() double? get pricePerMonth; int? get floor; double? get size; List<String> get amenities; bool get isAvailable; Hostel? get hostel;
+ String get id; String get roomNumber; String get title; String? get description; String get roomType; int get capacity;@DoubleConverter() double get pricePerNight;@DoubleConverter() double? get pricePerMonth; int? get floor; double? get size; List<String> get amenities; bool get isAvailable; Hostel? get hostel;
 /// Create a copy of Room
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -241,12 +239,10 @@ class _Room extends Room {
 @override final  String id;
 @override final  String roomNumber;
 @override@JsonKey() final  String title;
-// Use default to prevent null crash
 @override final  String? description;
 @override final  String roomType;
 @override final  int capacity;
 @override@DoubleConverter() final  double pricePerNight;
-// Safe Decimal parsing
 @override@DoubleConverter() final  double? pricePerMonth;
 @override final  int? floor;
 @override final  double? size;

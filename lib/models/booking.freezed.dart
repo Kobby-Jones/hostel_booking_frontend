@@ -15,8 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Booking {
 
- String get id; String? get bookingCode; String get status; DateTime get checkInDate; DateTime get checkOutDate; int get numberOfNights; int get numberOfGuests;@DoubleConverter() double get totalAmount; String? get specialRequests;// Change: Ensure nested objects are nullable to prevent 'type Null' errors
- Room? get room;
+ String get id; String? get bookingCode; String get status; DateTime get checkInDate; DateTime get checkOutDate; int get numberOfNights; int get numberOfGuests;@DoubleConverter() double get totalAmount; String? get specialRequests; Room? get room;
 /// Create a copy of Booking
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -243,7 +242,6 @@ class _Booking extends Booking {
 @override final  int numberOfGuests;
 @override@DoubleConverter() final  double totalAmount;
 @override final  String? specialRequests;
-// Change: Ensure nested objects are nullable to prevent 'type Null' errors
 @override final  Room? room;
 
 /// Create a copy of Booking

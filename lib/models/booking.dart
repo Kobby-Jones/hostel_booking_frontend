@@ -5,7 +5,8 @@ import 'room.dart';
 part 'booking.freezed.dart';
 part 'booking.g.dart';
 
-@freezed
+@Freezed(toJson: true)
+@JsonSerializable(explicitToJson: true)
 abstract class Booking with _$Booking {
   const Booking._();
 
@@ -19,7 +20,6 @@ abstract class Booking with _$Booking {
     required int numberOfGuests,
     @DoubleConverter() required double totalAmount,
     String? specialRequests,
-    // Change: Ensure nested objects are nullable to prevent 'type Null' errors
     Room? room, 
   }) = _Booking;
 

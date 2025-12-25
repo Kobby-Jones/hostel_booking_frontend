@@ -6,7 +6,8 @@ import 'hostel_image.dart';
 part 'hostel.freezed.dart';
 part 'hostel.g.dart';
 
-@freezed
+@Freezed(toJson: true)
+@JsonSerializable(explicitToJson: true)
 abstract class Hostel with _$Hostel {
   const Hostel._();
 

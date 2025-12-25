@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:hostel_booking/core/providers.dart";
+import "package:hostel_booking/features/owner/create_hostel_screen.dart";
 import "../features/auth/auth_controller.dart";
 import "../features/auth/login_screen.dart";
 import "../features/hostels/hostel_list_screen.dart";
@@ -93,6 +94,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => PaymentResultScreen(reference: state.uri.queryParameters["reference"] ?? ""),
       ),
-    ],
+    GoRoute(
+      path: "/owner/create-hostel",
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const CreateHostelScreen(),
+    ),
+        ],
   );
 });

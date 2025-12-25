@@ -1,22 +1,23 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hostel_booking/models/hostel.dart';
-import '../core/json_converters.dart'; // Import the converter
+import '../core/json_converters.dart';
 
 part 'room.freezed.dart';
 part 'room.g.dart';
 
-@freezed
+@Freezed(toJson: true)
+@JsonSerializable(explicitToJson: true)
 abstract class Room with _$Room {
   const Room._();
 
   const factory Room({
     required String id,
     required String roomNumber,
-    @Default("Standard Room") String title, // Use default to prevent null crash
+    @Default("Standard Room") String title,
     String? description,
     required String roomType,
     required int capacity,
-    @DoubleConverter() required double pricePerNight, // Safe Decimal parsing
+    @DoubleConverter() required double pricePerNight,
     @DoubleConverter() double? pricePerMonth,
     int? floor,
     double? size,

@@ -20,29 +20,37 @@ class BookingService {
         "numberOfGuests": numberOfGuests,
       },
     );
-    // Backend returns { success: true, data: { booking: { id: ... } } }
     return response.data["data"]["booking"]["id"] as String;
   }
 
+  Future<List<Booking>> getMyBookings() async {
+    try {
+      final response = await _dio.get("/bookings");
+      
+      final List? rawBookings = response.data["data"]["bookings"];
+      
+      if (rawBookings == null || rawBookings.isEmpty) return [];
 
-Future<List<Booking>> getMyBookings() async {
-  try {
-    final response = await _dio.get("/bookings");
-    
-    // The backend returns { success: true, data: { bookings: [...] } }
-    final List? rawBookings = response.data["data"]["bookings"];
-    
-    if (rawBookings == null) return [];
-
-    return rawBookings
-        .map((e) => Booking.fromJson(e as Map<String, dynamic>))
-        .toList();
-  } catch (e) {
-    throw Exception("Failed to load bookings: $e");
+      // Parse bookings with better error handling
+      return rawBookings
+          .map((e) {
+            try {
+              return Booking.fromJson(e as Map<String, dynamic>);
+            } catch (e) {
+              // Log but don't stop the entire list
+              print('Warning: Skipped malformed booking: $e');
+              return null;
+            }
+          })
+          .whereType<Booking>() // Filter out nulls
+          .toList();
+          
+    } on DioException catch (e) {
+      throw Exception("Failed to load bookings: ${e.message}");
+    } catch (e) {
+      throw Exception("Failed to load bookings: $e");
+    }
   }
-}
-
- 
 
   Future<void> cancelBooking(String bookingId, {String? reason}) async {
     await _dio.post(

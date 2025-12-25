@@ -187,8 +187,10 @@ class _RoomCard extends StatelessWidget {
             onPressed: () => context.push("/booking/${room.id}"),
             child: const Text("Select"),
           ),
+          
         ],
       ),
+      
     );
   }
 }
