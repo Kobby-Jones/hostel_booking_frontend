@@ -40,9 +40,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             password: _passwordController.text.trim(),
           );
 
+      // Check if widget is still mounted before navigating
+      if (!mounted) return;
+
       final target = widget.redirectTo ?? "/hostels";
       context.go(target);
     } catch (e) {
+      // Check if widget is still mounted before showing snackbar
+      if (!mounted) return;
+      
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Row(

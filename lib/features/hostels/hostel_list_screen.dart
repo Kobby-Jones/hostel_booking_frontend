@@ -35,7 +35,6 @@ class _HostelListScreenState extends ConsumerState<HostelListScreen> {
   List<Hostel> _applyFilters(List<Hostel> hostels) {
     var filtered = hostels;
 
-    // Search filter
     if (_searchQuery.isNotEmpty) {
       filtered = filtered.where((hostel) {
         final query = _searchQuery.toLowerCase();
@@ -45,7 +44,6 @@ class _HostelListScreenState extends ConsumerState<HostelListScreen> {
       }).toList();
     }
 
-    // Category filter
     switch (_selectedFilter) {
       case 'Nearby':
         filtered.sort((a, b) =>
@@ -53,11 +51,9 @@ class _HostelListScreenState extends ConsumerState<HostelListScreen> {
         filtered = filtered.take(10).toList();
         break;
       case 'Popular':
-        // Sort by number of rooms as popularity indicator
         filtered.sort((a, b) => b.rooms.length.compareTo(a.rooms.length));
         break;
       case 'Budget':
-        // Sort by lowest price
         filtered = filtered.where((h) => h.rooms.isNotEmpty).toList();
         filtered.sort((a, b) {
           final aPrice = a.rooms.isEmpty ? 999999 : a.rooms.first.pricePerNight;
@@ -67,7 +63,6 @@ class _HostelListScreenState extends ConsumerState<HostelListScreen> {
         break;
     }
 
-    // Price range filter
     filtered = filtered.where((hostel) {
       if (hostel.rooms.isEmpty) return false;
       final lowestPrice = hostel.rooms.first.pricePerNight;
@@ -82,124 +77,98 @@ class _HostelListScreenState extends ConsumerState<HostelListScreen> {
     final state = ref.watch(hostelListProvider);
 
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          // Modern App Bar
-          SliverAppBar(
-            expandedHeight: 160,
-            floating: true,
-            pinned: true,
-            backgroundColor: Colors.white,
-            elevation: 0,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                decoration: BoxDecoration(
-                  gradient: AppTheme.primaryGradient,
-                  borderRadius: const BorderRadius.vertical(
-                    bottom: Radius.circular(32),
-                  ),
-                ),
-                child: SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppSpacing.lg),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        const Text(
-                          'Find Your',
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.white,
-                            letterSpacing: -0.5,
-                          ),
-                        ),
-                        const Text(
-                          'Perfect Stay',
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.white,
-                            letterSpacing: -0.5,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Header
+            Container(
+              padding: const EdgeInsets.all(AppSpacing.lg),
+              decoration: BoxDecoration(
+                gradient: AppTheme.primaryGradient,
+                borderRadius: const BorderRadius.vertical(
+                  bottom: Radius.circular(32),
                 ),
               ),
-            ),
-            bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(60),
-              child: Container(
-                color: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.lg,
-                  vertical: AppSpacing.md,
-                ),
-                child: Row(
-                  children: [
-                    // Search Bar
-                    Expanded(
-                      child: Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Find Your',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                  const Text(
+                    'Perfect Stay',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.lg),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: TextField(
+                            controller: _searchController,
+                            decoration: const InputDecoration(
+                              hintText: 'Search hostels...',
+                              prefixIcon: Icon(Icons.search_rounded),
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 14,
+                              ),
+                            ),
+                            onChanged: (value) {
+                              setState(() {
+                                _searchQuery = value;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: AppSpacing.md),
+                      Container(
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade100,
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(16),
+                          boxShadow: AppShadows.small,
                         ),
-                        child: TextField(
-                          controller: _searchController,
-                          decoration: const InputDecoration(
-                            hintText: 'Search hostels...',
-                            prefixIcon: Icon(Icons.search_rounded),
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 14,
-                            ),
-                          ),
-                          onChanged: (value) {
-                            setState(() {
-                              _searchQuery = value;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: AppSpacing.md),
-                    // Filter Button
-                    Container(
-                      decoration: BoxDecoration(
-                        gradient: AppTheme.primaryGradient,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: AppShadows.small,
-                      ),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          onTap: () => _showFilterBottomSheet(context),
-                          borderRadius: BorderRadius.circular(16),
-                          child: Container(
-                            padding: const EdgeInsets.all(14),
-                            child: const Icon(
-                              Icons.tune_rounded,
-                              color: Colors.white,
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () => _showFilterBottomSheet(context),
+                            borderRadius: BorderRadius.circular(16),
+                            child: Container(
+                              padding: const EdgeInsets.all(14),
+                              child: const Icon(
+                                Icons.tune_rounded,
+                                color: AppTheme.primaryColor,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
+                ],
               ),
             ),
-          ),
 
-          // Filter Chips
-          SliverToBoxAdapter(
-            child: Container(
+            // Filter Chips
+            SizedBox(
               height: 60,
-              margin: const EdgeInsets.symmetric(vertical: AppSpacing.md),
               child: ListView.separated(
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
                 scrollDirection: Axis.horizontal,
@@ -237,50 +206,42 @@ class _HostelListScreenState extends ConsumerState<HostelListScreen> {
                 },
               ),
             ),
-          ),
 
-          // Hostel List
-          state.when(
-            loading: () => const _HostelListLoading(),
-            error: (error, _) => SliverFillRemaining(
-              child: _ErrorState(
-                error: error.toString(),
-                onRetry: () => ref.refresh(hostelListProvider),
+            // Hostel List
+            Expanded(
+              child: state.when(
+                loading: () => const _HostelListLoading(),
+                error: (error, _) => _ErrorState(
+                  error: error.toString(),
+                  onRetry: () => ref.refresh(hostelListProvider),
+                ),
+                data: (data) {
+                  final hostels = _applyFilters(data.$1);
+                  
+                  if (hostels.isEmpty) {
+                    return _EmptyState(
+                      message: _searchQuery.isNotEmpty
+                          ? 'No hostels match your search'
+                          : 'No hostels found',
+                    );
+                  }
+
+                  return RefreshIndicator(
+                    onRefresh: () async {
+                      ref.invalidate(hostelListProvider);
+                    },
+                    child: ListView.separated(
+                      padding: const EdgeInsets.all(AppSpacing.lg),
+                      itemCount: hostels.length,
+                      separatorBuilder: (_, _) => const SizedBox(height: AppSpacing.lg),
+                      itemBuilder: (context, index) => _HostelCard(hostel: hostels[index]),
+                    ),
+                  );
+                },
               ),
             ),
-            data: (data) {
-              final hostels = _applyFilters(data.$1);
-              
-              if (hostels.isEmpty) {
-                return SliverFillRemaining(
-                  child: _EmptyState(
-                    message: _searchQuery.isNotEmpty
-                        ? 'No hostels match your search'
-                        : 'No hostels found',
-                  ),
-                );
-              }
-
-              return SliverPadding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSpacing.lg,
-                  0,
-                  AppSpacing.lg,
-                  AppSpacing.xl * 2,
-                ),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) => Padding(
-                      padding: const EdgeInsets.only(bottom: AppSpacing.lg),
-                      child: _HostelCard(hostel: hostels[index]),
-                    ),
-                    childCount: hostels.length,
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -321,7 +282,6 @@ class _HostelListScreenState extends ConsumerState<HostelListScreen> {
                   ),
                   const SizedBox(height: AppSpacing.lg),
                   
-                  // Price Range
                   const Text(
                     'Price Range (per night)',
                     style: TextStyle(
@@ -367,7 +327,6 @@ class _HostelListScreenState extends ConsumerState<HostelListScreen> {
                   
                   const SizedBox(height: AppSpacing.xl),
                   
-                  // Apply Button
                   Row(
                     children: [
                       Expanded(
@@ -418,7 +377,6 @@ class _HostelCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Image with Gradient Overlay
           Stack(
             children: [
               Hero(
@@ -446,7 +404,6 @@ class _HostelCard extends StatelessWidget {
                 ),
               ),
 
-              // Gradient Overlay
               Positioned(
                 bottom: 0,
                 left: 0,
@@ -466,7 +423,6 @@ class _HostelCard extends StatelessWidget {
                 ),
               ),
 
-              // Distance Badge
               if (hostel.distanceFromCampus != null)
                 Positioned(
                   top: 12,
@@ -502,7 +458,6 @@ class _HostelCard extends StatelessWidget {
                   ),
                 ),
 
-              // Rating Badge
               Positioned(
                 top: 12,
                 left: 12,
@@ -539,7 +494,6 @@ class _HostelCard extends StatelessWidget {
             ],
           ),
 
-          // Content
           Padding(
             padding: const EdgeInsets.all(AppSpacing.lg),
             child: Column(
@@ -580,7 +534,6 @@ class _HostelCard extends StatelessWidget {
                 ),
                 const SizedBox(height: AppSpacing.md),
 
-                // Amenities
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
@@ -608,7 +561,6 @@ class _HostelCard extends StatelessWidget {
 
                 const SizedBox(height: AppSpacing.md),
 
-                // Price
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -678,17 +630,13 @@ class _HostelListLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverPadding(
+    return ListView.builder(
       padding: const EdgeInsets.all(AppSpacing.lg),
-      sliver: SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (_, _) => const Padding(
-            padding: EdgeInsets.only(bottom: AppSpacing.lg),
-            child: AppShimmer(
-                width: double.infinity, height: 340, borderRadius: 24),
-          ),
-          childCount: 3,
-        ),
+      itemCount: 3,
+      itemBuilder: (_, _) => const Padding(
+        padding: EdgeInsets.only(bottom: AppSpacing.lg),
+        child: AppShimmer(
+            width: double.infinity, height: 340, borderRadius: 24),
       ),
     );
   }

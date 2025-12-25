@@ -40,15 +40,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
 
     _controller.forward();
-
-    // Check if user is already authenticated
     _checkAuthStatus();
   }
 
   Future<void> _checkAuthStatus() async {
     final authState = ref.read(authControllerProvider);
     if (authState == AuthState.authenticated) {
-      // Redirect to hostels if already logged in
       await Future.delayed(const Duration(milliseconds: 500));
       if (mounted) {
         context.go('/hostels');
@@ -78,104 +75,117 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           ),
         ),
         child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(AppSpacing.xl),
-            child: Column(
-              children: [
-                const Spacer(),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: constraints.maxHeight,
+                  ),
+                  child: IntrinsicHeight(
+                    child: Padding(
+                      padding: const EdgeInsets.all(AppSpacing.xl),
+                      child: Column(
+                        children: [
+                          const SizedBox(height: AppSpacing.xl),
 
-                // Logo and Title
-                FadeTransition(
-                  opacity: _fadeAnimation,
-                  child: SlideTransition(
-                    position: _slideAnimation,
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(24),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            boxShadow: AppShadows.large,
+                          // Logo and Title
+                          FadeTransition(
+                            opacity: _fadeAnimation,
+                            child: SlideTransition(
+                              position: _slideAnimation,
+                              child: Column(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(24),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      shape: BoxShape.circle,
+                                      boxShadow: AppShadows.large,
+                                    ),
+                                    child: const Icon(
+                                      Icons.home_rounded,
+                                      size: 64,
+                                      color: AppTheme.primaryColor,
+                                    ),
+                                  ),
+                                  const SizedBox(height: AppSpacing.xl),
+                                  const Text(
+                                    'HostelHub',
+                                    style: TextStyle(
+                                      fontSize: 48,
+                                      fontWeight: FontWeight.w900,
+                                      color: Colors.white,
+                                      letterSpacing: -1.5,
+                                    ),
+                                  ),
+                                  const SizedBox(height: AppSpacing.sm),
+                                  Text(
+                                    'Find Your Perfect Stay',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.white.withOpacity(0.9),
+                                      letterSpacing: 0.5,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          child: const Icon(
-                            Icons.home_rounded,
-                            size: 64,
-                            color: AppTheme.primaryColor,
+
+                          const Spacer(),
+
+                          // Role Selection Cards
+                          FadeTransition(
+                            opacity: _fadeAnimation,
+                            child: Column(
+                              children: [
+                                _RoleCard(
+                                  icon: Icons.search_rounded,
+                                  title: 'Find a Hostel',
+                                  subtitle: 'Browse and book hostels',
+                                  gradient: AppTheme.primaryGradient,
+                                  onTap: () => context.go('/hostels'),
+                                ),
+                                const SizedBox(height: AppSpacing.md),
+                                _RoleCard(
+                                  icon: Icons.business_rounded,
+                                  title: 'List Your Property',
+                                  subtitle: 'Become a hostel owner',
+                                  gradient: AppTheme.accentGradient,
+                                  onTap: () => context.go('/login?role=owner'),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: AppSpacing.xl),
-                        const Text(
-                          'HostelHub',
-                          style: TextStyle(
-                            fontSize: 48,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.white,
-                            letterSpacing: -1.5,
+
+                          const SizedBox(height: AppSpacing.xl),
+
+                          // Login Link
+                          FadeTransition(
+                            opacity: _fadeAnimation,
+                            child: TextButton(
+                              onPressed: () => context.go('/login'),
+                              child: Text(
+                                'Already have an account? Sign In',
+                                style: TextStyle(
+                                  color: Colors.white.withOpacity(0.9),
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: AppSpacing.sm),
-                        Text(
-                          'Find Your Perfect Stay',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white.withOpacity(0.9),
-                            letterSpacing: 0.5,
-                          ),
-                        ),
-                      ],
+
+                          const SizedBox(height: AppSpacing.lg),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-
-                const Spacer(),
-
-                // Role Selection Cards
-                FadeTransition(
-                  opacity: _fadeAnimation,
-                  child: Column(
-                    children: [
-                      _RoleCard(
-                        icon: Icons.search_rounded,
-                        title: 'Find a Hostel',
-                        subtitle: 'Browse and book hostels',
-                        gradient: AppTheme.primaryGradient,
-                        onTap: () => context.go('/hostels'),
-                      ),
-                      const SizedBox(height: AppSpacing.md),
-                      _RoleCard(
-                        icon: Icons.business_rounded,
-                        title: 'List Your Property',
-                        subtitle: 'Become a hostel owner',
-                        gradient: AppTheme.accentGradient,
-                        onTap: () => context.go('/login?role=owner'),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: AppSpacing.xl),
-
-                // Login Link
-                FadeTransition(
-                  opacity: _fadeAnimation,
-                  child: TextButton(
-                    onPressed: () => context.go('/login'),
-                    child: Text(
-                      'Already have an account? Sign In',
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.9),
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: AppSpacing.lg),
-              ],
-            ),
+              );
+            },
           ),
         ),
       ),
